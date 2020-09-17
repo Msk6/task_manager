@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from boards import views
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('register/', views.Register.as_view(), name='register'),
+
+
+    path('board/create/', views.BoardCreate.as_view(), name='board-create'),
+    path('board/list/', views.BoardsList.as_view(), name='board-list'),
 ]
