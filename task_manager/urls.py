@@ -26,4 +26,5 @@ urlpatterns = [
 
     path('board/create/', views.BoardCreate.as_view(), name='board-create'),
     path('board/list/', views.BoardsList.as_view(), name='board-list'),
+    path('board/<int:board_id>/delete/', views.BoardDelete.as_view(), name='board-delete'),
 ]
