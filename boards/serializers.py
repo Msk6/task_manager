@@ -27,7 +27,7 @@ class CreatBoardSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', ]
+        fields = ['first_name', 'last_name','username' ]
 
 
 class BoardsSerializer(serializers.ModelSerializer):
@@ -42,27 +42,38 @@ class BoardsSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['creation_date', 'description', 'is_hidden', 'is_done',]	
+        fields = ['creation_date', 'description', 'is_hidden', 'is_done',]
 
 
 class BoardOwnerDetailSerializer(serializers.ModelSerializer):
-	tasks = serializers.SerializerMethodField()
+	hidden = serializers.SerializerMethodField()
+	done = serializers.SerializerMethodField()
+	not_done = serializers.SerializerMethodField()
 	class Meta:
 		model = Board
-		fields = ['title', 'tasks']
-		
-	def get_tasks(self, obj):
-		return TaskSerializer(obj.tasks.all(), many=True).data
+		fields = ['title', 'hidden', 'done', 'not_done']
+
+	def get_hidden(self, obj):
+		return TaskSerializer(obj.tasks.filter(is_hidden=True).order_by('creation_date'), many=True).data
+
+	def get_done(self, obj):
+		return TaskSerializer(obj.tasks.filter(is_done=True).order_by('creation_date'), many=True).data
+
+	def get_not_done(self, obj):
+		return TaskSerializer(obj.tasks.filter(is_done=False).order_by('creation_date'), many=True).data
 
 
 class BoardDetailSerializer(serializers.ModelSerializer):
-	tasks = serializers.SerializerMethodField()
+	done = serializers.SerializerMethodField()
+	not_done = serializers.SerializerMethodField()
 	class Meta:
 		model = Board
-		fields = ['title', 'tasks']
-			
-	def get_tasks(self, obj):
-		return TaskSerializer(obj.tasks.filter(is_hidden=False), many=True).data
+		fields = ['title', 'done','not_done']
+
+	def get_done(self, obj):
+		return TaskSerializer(obj.tasks.filter(is_done=True,is_hidden=False).order_by('creation_date'), many=True).data
+	def get_not_done(self, obj):
+		return TaskSerializer(obj.tasks.filter(is_done=False,is_hidden=False).order_by('creation_date'), many=True).data
 
 
 class CreateUpdateTaskSerializer(serializers.ModelSerializer):

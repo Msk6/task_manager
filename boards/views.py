@@ -3,8 +3,8 @@ from rest_framework.generics import (
 	ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
 	)
 from .serializers import (
-	RegisterSerializer, CreatBoardSerializer, BoardsSerializer, 
-	BoardDetailSerializer, BoardOwnerDetailSerializer, CreateUpdateTaskSerializer
+	RegisterSerializer, CreatBoardSerializer, BoardsSerializer,
+	BoardDetailSerializer, BoardOwnerDetailSerializer, CreateUpdateTaskSerializer, TaskSerializer
 	)
 from django.contrib.auth.models import User
 from .models import Board, Task
@@ -19,18 +19,20 @@ class Register(CreateAPIView):
 
 class BoardCreate(CreateAPIView):
     serializer_class = CreatBoardSerializer
-    permission_classes= [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 
 class BoardsList(ListAPIView):
-	queryset = Board.objects.all()
-	serializer_class = BoardsSerializer
-	permission_classes= [IsAuthenticated, IsOwner]
+    queryset = Board.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]
+    serializer_class = BoardsSerializer
+
 
 
 class BoardDelete(DestroyAPIView):
+
 	queryset = Board.objects.all()
 	lookup_field = 'id'
 	lookup_url_kwarg = 'board_id'
@@ -45,7 +47,7 @@ class BoardDetail(RetrieveAPIView):
 	lookup_url_kwarg = 'board_id'
 	permission_classes = [IsAuthenticated]
 
-	# control the including of hidden tasks 
+	# control the including of hidden tasks
 	def get_serializer_class(self):
 		if self.request.user == self.get_object().owner or self.request.user.is_staff:
 			return BoardOwnerDetailSerializer
@@ -56,7 +58,7 @@ class BoardDetail(RetrieveAPIView):
 class TaskAdd(CreateAPIView):
 	serializer_class = CreateUpdateTaskSerializer
 	permission_classes= [EditBoard]
-	
+
 	def perform_create(self, serializer):
 		serializer.save(board_id=self.kwargs['board_id'])
 
@@ -69,3 +71,9 @@ class TaskUpdate(RetrieveUpdateAPIView):
 	permission_classes= [EditBoard]
 
 # ---- end new ----
+class TaskDelete(DestroyAPIView):
+
+	queryset = Task.objects.all()
+	lookup_field = 'id'
+	lookup_url_kwarg = 'task_id'
+	permission_classes= [EditBoard]
