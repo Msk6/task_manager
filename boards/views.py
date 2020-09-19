@@ -30,7 +30,6 @@ class BoardsList(ListAPIView):
     serializer_class = BoardsSerializer
 
 
-
 class BoardDelete(DestroyAPIView):
 
 	queryset = Board.objects.all()
@@ -38,7 +37,6 @@ class BoardDelete(DestroyAPIView):
 	lookup_url_kwarg = 'board_id'
 	permission_classes= [EditBoard]
 
-# ---- new ----
 
 class BoardDetail(RetrieveAPIView):
 	queryset = Board.objects.all()
@@ -70,9 +68,8 @@ class TaskUpdate(RetrieveUpdateAPIView):
 	lookup_url_kwarg = 'task_id'
 	permission_classes= [EditBoard]
 
-# ---- end new ----
-class TaskDelete(DestroyAPIView):
 
+class TaskDelete(DestroyAPIView):
 	queryset = Task.objects.all()
 	lookup_field = 'id'
 	lookup_url_kwarg = 'task_id'

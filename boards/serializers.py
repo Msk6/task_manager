@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Board , Task
+from .models import Board, Task
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -36,8 +36,6 @@ class BoardsSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['title', 'owner', ]
 
-
-# ---- new ----
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,4 +79,3 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ['description', 'is_hidden', 'is_done',]
 
-# ---- end new ----

@@ -15,9 +15,7 @@ class Task(models.Model):
 	creation_date = models.DateField(auto_now_add=True)
 	is_hidden = models.BooleanField()
 	is_done = models.BooleanField()
-	# ---- new ----
 	board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="tasks")
-	# ---- end new ----
 
 	def __str__(self):
 		return self.description

@@ -27,11 +27,10 @@ urlpatterns = [
     path('board/create/', views.BoardCreate.as_view(), name='board-create'),
     path('board/list/', views.BoardsList.as_view(), name='board-list'),
     path('board/<int:board_id>/delete/', views.BoardDelete.as_view(), name='board-delete'),
-    # ---- new ----
     path('board/<int:board_id>/detail/', views.BoardDetail.as_view(), name='board-detail'),
 
     path('task/<int:board_id>/add/', views.TaskAdd.as_view(), name='task-add'),
     path('task/<int:board_id>/<int:task_id>/update/', views.TaskUpdate.as_view(), name='task-update'),
     path('task/<int:board_id>/<int:task_id>/delete/', views.TaskDelete.as_view(), name='task-delete'),
-    # ---- end new ----
+    
 ]
